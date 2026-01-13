@@ -1,0 +1,24 @@
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(26, 167, 255, 0.18);
+  border: 1px solid rgba(26, 167, 255, 0.45);
+  color: #1aa7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(26, 167, 255, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.back-to-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 28px rgba(26, 167, 255, 0.6);
+}

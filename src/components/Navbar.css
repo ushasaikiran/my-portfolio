@@ -1,0 +1,54 @@
+.navbar {
+   position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 70px;
+
+
+}
+
+.nav-left {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 34px;
+  font-size: 14px;
+}
+
+.nav-links li {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.nav-links li:hover {
+  opacity: 1;
+}
+
+.nav-links li.active {
+  opacity: 1;
+  font-weight: 600;
+}
+.nav-show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.nav-hide {
+  opacity: 0;
+  transform: translateY(-15px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}

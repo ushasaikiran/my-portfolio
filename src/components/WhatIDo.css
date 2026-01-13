@@ -1,0 +1,137 @@
+.whatido {
+  padding: 120px 70px;
+}
+
+.whatido-title {
+  text-align: center;
+  font-size: 56px;
+  font-weight: 900;
+  margin-bottom: 60px;
+}
+
+.whatido-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.whatido-illustration {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 26px;
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.whatido-illus-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  place-items: center;
+  opacity: 0.75;
+}
+
+.whatido-heading {
+  font-size: 56px;
+  font-weight: 900;
+  color: #1aa7ff;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+
+.whatido-icons {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+
+.whatido-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+}
+
+.whatido-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.7;
+}
+
+.whatido-list li {
+  position: relative;
+  padding-left: 26px;
+}
+
+.whatido-list li::before {
+  content: "⚡";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+@media (max-width: 1000px) {
+  .whatido-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .whatido-heading {
+    font-size: 46px;
+  }
+
+  .whatido-title {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  .whatido {
+    padding: 90px 20px;
+  }
+}
+.illus-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: 40px;
+  box-shadow: 0 0 60px rgba(0, 160, 255, 0.12);
+}
+
+.illus-stat h4 {
+  font-size: 34px;
+  color: #1aa7ff;
+  margin-bottom: 6px;
+}
+
+.illus-stat p {
+  opacity: 0.7;
+  font-size: 14px;
+}
