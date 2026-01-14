@@ -29,7 +29,7 @@ export default function Chatbot() {
       const res = await fetch("/.netlify/functions/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ messages: userMessage }),
       });
 
       if (!res.ok) {

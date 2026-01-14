@@ -1,46 +1,83 @@
-import fetch from "node-fetch";
-
-export async function handler(event) {
+export const handler = async (event) => {
   try {
-    const { message } = JSON.parse(event.body);
+    // CORS (safe even if same-origin)
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+    };
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Preflight
+    if (event.httpMethod === "OPTIONS") {
+      return { statusCode: 200, headers, body: "" };
+    }
+
+    // Only POST
+    if (event.httpMethod !== "POST") {
+      return {
+        statusCode: 405,
+        headers,
+        body: JSON.stringify({ error: "Method not allowed" }),
+      };
+    }
+
+    const { message } = JSON.parse(event.body || "{}");
+
+    if (!message || typeof message !== "string") {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "Missing message" }),
+      };
+    }
+
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: "OPENAI_API_KEY is not set" }),
+      };
+    }
+
+    const resp = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a friendly AI assistant on a personal portfolio website. Answer briefly, professionally, and clearly."
-          },
-          {
-            role: "user",
-            content: message
-          }
-        ],
-        temperature: 0.7
-      })
+        model: "gpt-4.1-mini",
+        input:
+          `You are a helpful AI assistant on a portfolio website. ` +
+          `Answer concisely and friendly.\n\nUser: ${message}`,
+      }),
     });
 
-    const data = await response.json();
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: data }),
+      };
+    }
+
+    const reply = data.output_text || "Sorry, I couldn't generate a response.";
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        reply: data.choices[0].message.content
-      })
+      headers,
+      body: JSON.stringify({ reply }),
     };
-  } catch (error) {
+  } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: "Something went wrong"
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: e?.message || "Server error" }),
     };
   }
-}
+};
