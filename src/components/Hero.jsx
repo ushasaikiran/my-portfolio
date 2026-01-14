@@ -1,6 +1,6 @@
 import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import "./Hero.css";
-import profile from "../assets/geminiformal.PNG";
+import profile from "../assets/geminiformal.png";
 
 
 function Hero() {
@@ -26,7 +26,7 @@ function Hero() {
       {/* Main Content */}
       <div className="hero-content">
         <div className="hero-left">
-          <h1 className="welcome">Welcome !</h1>
+          <h1 className="welcome">Hey Welcome !</h1>
 
           <div className="intro-line">
             <span className="im-text">I'm</span>
