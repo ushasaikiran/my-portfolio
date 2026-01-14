@@ -16,39 +16,59 @@ export default function Chatbot() {
   }, [messages, open]);
 
   async function sendMessage(e) {
-    e.preventDefault();
-    const trimmed = text.trim();
-    if (!trimmed || loading) return;
+     e.preventDefault();
 
-    const nextMessages = [...messages, { role: "user", content: trimmed }];
-    setMessages(nextMessages);
-    setText("");
-    setLoading(true);
+  const trimmed = text.trim();
+  if (!trimmed || loading) return;
 
-    try {
-      const res = await fetch("/.netlify/functions/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: userMessage }),
-      });
+  // add user message immediately to UI
+  const nextMessages = [...messages, { role: "user", content: trimmed }];
+  setMessages(nextMessages);
+  setText("");
+  setLoading(true);
 
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText || "Request failed");
-      }
+  try {
+    const res = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: nextMessages }), // ✅ FIXED
+    });
 
-      const data = await res.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "⚠️ Sorry — I had trouble responding. Please try again." },
-      ]);
-      console.error(err);
-    } finally {
-      setLoading(false);
+    // Try JSON first, fallback to text
+    let data;
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      data = await res.json();
+    } else {
+      const t = await res.text();
+      data = { error: t };
     }
+
+    if (!res.ok) {
+      // ✅ Show friendly 429 + other server errors
+      const msg =
+        data?.error ||
+        (res.status === 429
+          ? "Too many requests 😅 Please wait 20–30 seconds and try again."
+          : `Request failed (${res.status}). Please try again.`);
+      throw new Error(msg);
+    }
+
+    // success
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: data.reply || "✅ (No reply returned)" },
+    ]);
+  } catch (err) {
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: `⚠️ ${err.message}` }, // ✅ show real reason
+    ]);
+    console.error(err);
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <>
