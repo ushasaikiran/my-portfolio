@@ -8,13 +8,6 @@ exports.handler = async (event) => {
     "Content-Type": "application/json",
   };
 
-  // Always show up in logs
-  console.log("✅ chat function hit:", {
-    method: event.httpMethod,
-    hasBody: !!event.body,
-    envKeyExists: !!process.env.OPENAI_API_KEY,
-  });
-
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
   }
@@ -30,7 +23,6 @@ exports.handler = async (event) => {
   try {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      console.log("❌ Missing OPENAI_API_KEY env var");
       return {
         statusCode: 500,
         headers,
@@ -38,16 +30,34 @@ exports.handler = async (event) => {
       };
     }
 
-    const { message } = JSON.parse(event.body || "{}");
-    if (!message || !message.trim()) {
+    const payload = JSON.parse(event.body || "{}");
+    const msgs = payload.messages;
+
+    // ✅ Expecting an array like: [{role:"user"/"assistant", content:"..."}]
+    if (!Array.isArray(msgs) || msgs.length === 0) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: "Message is required." }),
+        body: JSON.stringify({ error: "messages[] is required." }),
       };
     }
 
-    // Call OpenAI Responses API using fetch
+    // ✅ limit to last 10 messages to reduce cost + avoid long prompts
+    const recent = msgs.slice(-10).map((m) => ({
+      role: m.role,
+      content: String(m.content || ""),
+    }));
+
+    // safety: ensure last user message exists
+    const last = recent[recent.length - 1];
+    if (!last || last.role !== "user" || !last.content.trim()) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "Last message must be a non-empty user message." }),
+      };
+    }
+
     const resp = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -57,8 +67,12 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: "gpt-5-mini",
         input: [
-          { role: "system", content: "You are a friendly portfolio assistant. Keep answers short and helpful." },
-          { role: "user", content: message },
+          {
+            role: "system",
+            content:
+              "You are a friendly portfolio assistant. Keep answers short, clear, and helpful. If asked about skills/projects, respond like a candidate. Avoid sensitive info.",
+          },
+          ...recent,
         ],
       }),
     });
@@ -66,19 +80,21 @@ exports.handler = async (event) => {
     const data = await resp.json();
 
     if (!resp.ok) {
-      console.log("❌ OpenAI request failed:", data);
       return {
         statusCode: resp.status,
         headers,
-        body: JSON.stringify({ error: data?.error?.message || "OpenAI error", raw: data }),
+        body: JSON.stringify({
+          error: data?.error?.message || "OpenAI error",
+        }),
       };
     }
 
-    const reply = data.output_text || "Thanks! Ask me anything about my projects, skills, or resume.";
-    console.log("✅ Reply generated");
+    const reply =
+      data.output_text ||
+      "Thanks! Ask me anything about my projects, skills, or resume.";
+
     return { statusCode: 200, headers, body: JSON.stringify({ reply }) };
   } catch (err) {
-    console.log("❌ Function crashed:", err);
     return {
       statusCode: 500,
       headers,
