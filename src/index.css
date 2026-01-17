@@ -1,4 +1,8 @@
-* {
+*
+
+
+
+{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -11,14 +15,29 @@ body {
 }
 
 body::before {
+body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 20% 30%, rgba(255, 196, 0, 0.10), transparent 45%),
-              radial-gradient(circle at 70% 60%, rgba(0, 180, 255, 0.10), transparent 45%);
+  background: radial-gradient(circle at 20% 30%, rgba(255, 196, 0, 0.10), transparent 65%),
+              radial-gradient(circle at 70% 60%, rgba(0, 180, 255, 0.10), transparent 65%);
   pointer-events: none;
+}
+
 }
 
 html {
   scroll-behavior: smooth;
+}
+/* Mobile safety padding */
+:root {
+  --container-pad: 56px;
+}
+
+@media (max-width: 768px) {
+  :root { --container-pad: 20px; }
+}
+
+body {
+  overflow-x: hidden;
 }

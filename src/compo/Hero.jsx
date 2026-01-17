@@ -1,6 +1,6 @@
 import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import "./Hero.css";
-import profile from "../assets/geminiformal.png";
+import profile from "../assets/projects/blackformal.png";
 
 
 function Hero() {
@@ -38,16 +38,16 @@ function Hero() {
           <h2 className="role">Data Analyst</h2>
 
           <p className="subtitle">
-            Data science practitioner and web developer who builds modern web apps,
+           A Data science practitioner and web developer who builds modern web apps,
             dashboards, and scalable solutions using React and data-driven thinking.
           </p>
 
-          <div className="hero-mini-icons">
+       {/*}   <div className="hero-mini-icons">
             <FaGithub />
             <FaLinkedinIn />
             <FaInstagram />
           </div>
-
+*/}
           <div className="hero-buttons">
             <button className="btn primary"
   onClick={() =>
@@ -55,14 +55,7 @@ function Hero() {
   }
 >
   Contact me</button>
-            <a
-  className="btn outline"
-  href={`${import.meta.env.BASE_URL}Resume.pdf`}
-  target="_blank"
-  rel="noreferrer"
->
-  See my resume
-</a>
+
           </div>
         </div>
 

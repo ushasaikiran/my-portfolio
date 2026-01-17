@@ -1,3 +1,6 @@
+
+
+
 .whatido {
   padding: 120px 70px;
 }
@@ -135,3 +138,44 @@
   opacity: 0.7;
   font-size: 14px;
 }
+/* ✅ image inside the stats card */
+.illus-card {
+  position: relative;
+}
+
+.illus-media {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+}
+
+.illus-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* won’t stretch */
+  display: block;
+  opacity: 0.92;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.illus-card:hover .illus-media img {
+  transform: scale(1.04);
+  opacity: 1;
+}
+
+/* mobile: shrink so it never overlaps text */
+@media (max-width: 768px) {
+  .illus-media {
+    width: 110px;
+    height: 110px;
+    top: 14px;
+    right: 14px;
+  }
+}
+

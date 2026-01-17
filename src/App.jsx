@@ -5,7 +5,6 @@ import Contact from "./compo/Contact";
 import WhatIDo from "./compo/WhatIDo";
 import Footer from "./compo/Footer";
 import BackToTop from "./compo/BackToTop";
-import Chatbot from "./compo/Chatbot";
 
 
 
@@ -23,7 +22,7 @@ function App() {
       <Contact />
       <Footer />
       <BackToTop />
-      <Chatbot />
+     
     </>
   );
 }

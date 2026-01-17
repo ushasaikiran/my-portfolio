@@ -54,6 +54,12 @@ function Navbar() {
           Projects
         </li>
 
+        <li onClick={() => document.getElementById("certifications").scrollIntoView({ behavior: "smooth" })}>
+  Certifications
+</li>
+
+
+
         <li
           onClick={() =>
             document

@@ -8,6 +8,9 @@ import {
 } from "react-icons/fa";
 import "./WhatIDo.css";
 
+// ✅ add this import (path must match your file)
+import geminiformalandworkingImg from "../assets/whatido/geminiformalandworking.png";
+
 function WhatIDo() {
   return (
     <section className="whatido" id="what-i-do">
@@ -15,21 +18,27 @@ function WhatIDo() {
 
       <div className="whatido-grid">
         <div className="whatido-illustration">
-  <div className="illus-card">
-    <div className="illus-stat">
-      <h4>+42%</h4>
-      <p>Forecast Accuracy</p>
-    </div>
-    <div className="illus-stat">
-      <h4>120+</h4>
-      <p>Dashboards Built</p>
-    </div>
-    <div className="illus-stat">
-      <h4>5M+</h4>
-      <p>Rows Processed</p>
-    </div>
-  </div>
-</div>
+          <div className="illus-card">
+
+            {/* ✅ NEW: image area (top-right corner) */}
+            <div className="illus-media">
+              <img src={geminiformalandworkingImg} alt="Analytics illustration" loading="lazy" />
+            </div>
+
+            <div className="illus-stat">
+              <h4>+42%</h4>
+              <p>Forecast Accuracy</p>
+            </div>
+            <div className="illus-stat">
+              <h4>120+</h4>
+              <p>Dashboards Built</p>
+            </div>
+            <div className="illus-stat">
+              <h4>5M+</h4>
+              <p>Rows Processed</p>
+            </div>
+          </div>
+        </div>
 
         <div className="whatido-right">
           <h3 className="whatido-heading">
